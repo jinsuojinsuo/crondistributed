@@ -16,6 +16,7 @@ import (
 	"gitee.com/liujinsuo/tool"
 	"github.com/go-redis/redis/v8"
 	"github.com/robfig/cron/v3"
+	"github.com/jinsuojinsuo/crondistributed"
 	"log"
 	"os"
 	"time"
@@ -39,7 +40,7 @@ func main() {
 
 	//使用插件
 	job := cron.NewChain(
-		crond.Distributed(rdb, cron.VerbosePrintfLogger(log.New(os.Stdout, "cron", log.LstdFlags|log.Lshortfile)), "test-job-name")).Then(cron.FuncJob(func() {
+		crondistributed.Distributed(rdb, cron.VerbosePrintfLogger(log.New(os.Stdout, "cron", log.LstdFlags|log.Lshortfile)), "test-job-name")).Then(cron.FuncJob(func() {
 		fmt.Println("执行任务", time.Now())
 	}))
 	_, _ = Cron.AddJob(tool.Cron.Every(time.Second), job)
