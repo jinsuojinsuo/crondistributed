@@ -1,4 +1,4 @@
-module github.com/jinsuojinsuo/crond
+module github.com/jinsuojinsuo/crondistributed
 
 go 1.18
 
