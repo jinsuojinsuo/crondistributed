@@ -1,4 +1,4 @@
-package crond
+package crondistributed
 
 import (
 	"context"

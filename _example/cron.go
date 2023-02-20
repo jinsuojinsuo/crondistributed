@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"gitee.com/liujinsuo/tool"
 	"github.com/go-redis/redis/v8"
-	"github.com/jinsuojinsuo/crond"
+	"github.com/jinsuojinsuo/crondistributed"
 	"github.com/robfig/cron/v3"
 	"log"
 	"os"
@@ -30,7 +30,7 @@ func main() {
 	//使用插件
 	job := cron.NewChain(
 		//cron.SkipIfStillRunning(cron.DefaultLogger), //上次任务未执行完成则跳过
-		crond.Distributed(rdb, cron.VerbosePrintfLogger(log.New(os.Stdout, "cron", log.LstdFlags|log.Lshortfile)), "test-job-name")).Then(cron.FuncJob(func() {
+		crondistributed.Distributed(rdb, cron.VerbosePrintfLogger(log.New(os.Stdout, "cron", log.LstdFlags|log.Lshortfile)), "test-job-name")).Then(cron.FuncJob(func() {
 		fmt.Println("执行任务", time.Now())
 		//time.Sleep(time.Second * 6)
 		//fmt.Println("执行任务完成", time.Now())
