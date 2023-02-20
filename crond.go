@@ -54,7 +54,7 @@ func (s cronT) Distributed(rdb *redis.Client, logger cron.Logger, jobName string
 				logger.Error(err, "redis命令执行失败")
 				return
 			} else if cast.ToString(result) == redisKeyServer {
-				logger.Info("锁定任务成功", "result", result) //锁定服务是当前服务 继续执行
+				logger.Info("锁定服务成功", "result", result) //锁定服务是当前服务 继续执行
 			} else {
 				logger.Info("锁定服务失败", "result", result)
 				return
