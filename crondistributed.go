@@ -114,12 +114,12 @@ func (s cronT) redisKeyServer(jobName string) string {
 	}
 	pid := os.Getpid()
 	TaskID := tool.NewMongoID().ToBase62() //如果有多个AddJob需要考TaskID来隔离
-	return fmt.Sprintf("%v:%s_%d_%s", jobName, host, pid, TaskID)
+	return fmt.Sprintf("crondistributed:%v:%s_%d_%s", jobName, host, pid, TaskID)
 }
 
 // 最后一次执行的服务器
 func (s cronT) redisKeyLastRunServer(jobName string) string {
-	return fmt.Sprintf("%v:last_run_server", jobName)
+	return fmt.Sprintf("crondistributed:%v:last_run_server", jobName)
 }
 
 // Distributed 分布式定时任务中间件
