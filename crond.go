@@ -54,9 +54,9 @@ func (s cronT) Distributed(rdb *redis.Client, logger cron.Logger, jobName string
 				logger.Error(err, "redis命令执行失败")
 				return
 			} else if cast.ToString(result) == redisKeyServer {
-				logger.Info("锁定任务成功", "result=", result) //锁定服务是当前服务 继续执行
+				logger.Info("锁定任务成功", "result", result) //锁定服务是当前服务 继续执行
 			} else {
-				logger.Info("锁定服务失败", "result=", result)
+				logger.Info("锁定服务失败", "result", result)
 				return
 			}
 			NextJob.Run()
@@ -98,7 +98,7 @@ func (s cronT) serverRenewal(rdb *redis.Client, logger cron.Logger, jobName stri
 		redisKeyServer,        //当前服务
 		redisKeyLastRunServer, //最后一次执行的服务
 	}, distributed/time.Second, redisKeyServer).Err(); err == redis.Nil {
-		//logger.Info("服务器信息续期成功") //无需处理
+		logger.Info("服务器信息续期成功") //无需处理
 	} else if err != nil {
 		logger.Error(err, "服务器信息续期失败")
 		return
