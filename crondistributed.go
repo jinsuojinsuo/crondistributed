@@ -20,15 +20,13 @@ type cronT struct {
 // 1.获取最后一次执行的服务，不存在则添加当前服务为最后一次执行的服务
 // 2.返回最后一次执行的服务
 const cronTLastRunServerScript = `
--- 获取最后一次执行的服务
 local str = redis.call("GET",KEYS[2])
 if str == KEYS[1] then
 	return str
 elseif str == false then
-	--无数据添加最后一次执行的服务为自己
 	local ok = redis.call("SET", KEYS[2],KEYS[1],"EX",ARGV[1],"NX")
 	if not ok then
-		return "锁定服务失败"
+		return "lock service failed"
 	else
 		return KEYS[1]
 	end
@@ -80,14 +78,12 @@ func (s cronT) distributedServer(rdb *redis.Client, logger cron.Logger, jobName 
 }
 
 // 当前服务续期
+// 获取最后一次执行的服务
+// 最后执行的服务是当前服务 续期
 const cronTServerRenewalScript = `
--- 当前服务续期
 redis.call("SETEX",KEYS[1],ARGV[1],1)
-
--- 获取最后一次执行的服务
 local str = redis.call("GET",KEYS[2])
 if str == ARGV[2] then
-	--最后执行的服务是当前服务 续期
 	redis.call("EXPIRE", KEYS[2],ARGV[1])
 end
 `
